@@ -2,24 +2,18 @@
 let
   inherit (lib) mkOption;
   inherit (lib) types;
+
+  cfg = config;
+
+  htmlLib = import ./html.nix { inherit lib; };
 in
 {
   options = {
     a = mkOption {
       description = "The <a> tag defines a hyperlink, which is used to link from one page to another.";
-      type = types.submodule (
-        {
-          lib,
-          config,
-          options,
-          ...
-        }:
-        let
-
-          cfg = config;
-          opts = options;
-        in
-        {
+      default = null;
+      type = types.nullOr (
+        types.submodule {
           options = {
             attributes = mkOption {
               description = "Attributes";
@@ -39,39 +33,21 @@ in
               type = types.str;
             };
           };
-
-          config = {
-            _out =
-              let
-                children = "";
-                attributes = (
-                  lib.optionalString opts.attributes.isDefined (
-                    lib.concatStringsSep " " (builtins.map (elem: elem._out) (builtins.attrValues cfg.attributes))
-                  )
-                );
-              in
-              lib.concatStringsSep "" [
-                "<a "
-                "${attributes}"
-                ">"
-                "${children}"
-                "</a>"
-              ];
-          };
         }
       );
     };
   };
 
   config = {
-    a = {
-      children = [ ];
-
-      attributes.download.enable = true;
-      attributes.download.filename = "new-filename";
-
-      attributes.href.enable = true;
-      attributes.href.url = "#top";
-    };
+    a._out =
+      let
+        children = "";
+        attributes = htmlLib.resolveHtmlAttributes cfg.a;
+      in
+      lib.concatStringsSep "\n" [
+        "<a${attributes}>"
+        "${children}"
+        "</a>"
+      ];
   };
 }
