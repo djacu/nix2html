@@ -1,11 +1,16 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  paths,
+  ...
+}:
 let
   inherit (lib) mkOption;
   inherit (lib) types;
 
   cfg = config;
 
-  htmlLib = import ./html.nix { inherit lib; };
+  htmlLib = import (paths.lib + "/html.nix") { inherit lib; };
 in
 {
   options = {
@@ -18,9 +23,9 @@ in
             attributes = mkOption {
               description = "Attributes";
               type = types.submodule {
-                imports = [
-                  ./download.nix
-                  ./href.nix
+                imports = builtins.map (file: paths.attributes + file) [
+                  "/download.nix"
+                  "/href.nix"
                 ];
               };
             };
