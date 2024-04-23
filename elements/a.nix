@@ -43,20 +43,22 @@ in
     };
     _out = mkOption {
       description = "This tags output.";
-      type = types.str;
+      type = types.listOf types.str;
     };
   };
 
   config = {
     _out =
       let
-        children = lib.concatStringsSep "\n" (builtins.map (elem: elem._out) cfg.children);
+        children = builtins.map (elem: "  " + elem) (
+          lib.flatten (builtins.map (elem: elem._out) cfg.children)
+        );
         attributes = htmlLib.resolveHtmlAttributes cfg;
       in
-      lib.concatStringsSep "\n" [
+      (lib.flatten [
         "<a${attributes}>"
-        "${children}"
+        children
         "</a>"
-      ];
+      ]);
   };
 }
