@@ -18,12 +18,7 @@ in
   options = {
     attributes = mkOption {
       description = "Attributes";
-      type = types.submodule {
-        imports = builtins.map (file: paths.attributes + file) [
-          "/download.nix"
-          "/href.nix"
-        ];
-      };
+      type = types.submodule { imports = builtins.map (file: paths.attributes + file) [ "/style.nix" ]; };
     };
 
     _out = mkOption {
@@ -38,9 +33,9 @@ in
         attributes = htmlLib.resolveHtmlAttributes cfg;
       in
       (lib.flatten [
-        "<a${attributes}>"
+        "<div${attributes}>"
         cfg._children
-        "</a>"
+        "</div>"
       ]);
   };
 }

@@ -36,7 +36,7 @@ in
       _out = (
         lib.optionalString (!builtins.isNull cfg.download && cfg.download.enable == true) (
           "download"
-          + (lib.optionalString (!builtins.isNull cfg.download.filename) "=${cfg.download.filename}")
+          + (lib.optionalString (!builtins.isNull cfg.download.filename) "=\"${cfg.download.filename}\"")
         )
       );
     };

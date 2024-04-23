@@ -5,19 +5,18 @@ let
       modules = [
         ./elements/a.nix
         ./config.nix
-        (
-          { ... }:
-          {
-            config._module.args = {
-              paths = {
-                lib = ./lib;
-                elements = ./elements;
-                attributes = ./attributes;
-              };
-            };
-          }
-        )
       ];
-    }).config._out;
+
+      specialArgs = {
+        # moved to specialArgs because _module.args was causing infinite recursion errors
+        paths = {
+          lib = ./lib;
+          elements = ./elements;
+          attributes = ./attributes;
+          modules = ./modules;
+        };
+      };
+    }).config;
 in
-pkgs.lib.concatStringsSep "\n" conf
+#conf
+pkgs.lib.concatStringsSep "\n" conf._out

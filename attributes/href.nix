@@ -35,7 +35,7 @@ in
     href = {
       _out = lib.concatStringsSep "" (
         lib.optional (!builtins.isNull cfg.href && cfg.href.enable == true) (
-          "href" + (lib.optionalString (!builtins.isNull cfg.href.url) "=${cfg.href.url}")
+          "href" + (lib.optionalString (!builtins.isNull cfg.href.url) "=\"${cfg.href.url}\"")
         )
       );
     };
