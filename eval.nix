@@ -3,7 +3,7 @@ let
   conf =
     (pkgs.lib.evalModules {
       modules = [
-        ./elements/a.nix
+        ./elements/html.nix
         ./config.nix
       ];
 

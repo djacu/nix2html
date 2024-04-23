@@ -1,11 +1,14 @@
 {
   config = {
     attributes = {
-      download.enable = true;
-      download.filename = "new-filename";
+      class.enable = true;
+      class.classnames = [
+        "intro"
+        "important"
+      ];
 
-      href.enable = true;
-      href.url = "#top";
+      contenteditable.enable = true;
+      contenteditable.value = true;
     };
 
     children = [
@@ -25,9 +28,22 @@
         div = {
           attributes = {
             style.enable = true;
-            style.definitions = "color:blue;text-align:center";
+            style.definitions = "color:blue;text-align:center;";
           };
-          children = [ ];
+          children = [
+            {
+              a = {
+                attributes = {
+                  download.enable = true;
+                  download.filename = "new-filename";
+
+                  href.enable = true;
+                  href.url = "#top";
+                };
+                children = [ ];
+              };
+            }
+          ];
         };
       }
     ];

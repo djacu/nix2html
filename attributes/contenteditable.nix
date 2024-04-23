@@ -7,17 +7,17 @@ let
 in
 {
   options = {
-    style = mkOption {
+    contenteditable = mkOption {
       description = "The style attribute specifies an inline style for an element.";
       default = null;
       type = types.nullOr (
         types.submodule {
           options = {
-            enable = mkEnableOption (lib.mdDoc "style");
+            enable = mkEnableOption (lib.mdDoc "contenteditable");
 
-            definitions = mkOption {
+            value = mkOption {
               description = "One or more CSS properties and values separated by semicolons.";
-              type = types.str;
+              type = types.bool;
             };
 
             _out = mkOption {
@@ -31,10 +31,10 @@ in
   };
 
   config = {
-    style = {
+    contenteditable = {
       _out = (
-        lib.optionalString (!builtins.isNull cfg.style && cfg.style.enable == true) (
-          "style=\"${cfg.style.definitions}\""
+        lib.optionalString (!builtins.isNull cfg.contenteditable && cfg.contenteditable.enable == true) (
+          "contenteditable=\"${lib.boolToString cfg.contenteditable.value}\""
         )
       );
     };
