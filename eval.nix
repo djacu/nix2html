@@ -16,4 +16,4 @@
       }
     )
   ];
-}).config.a._out
+}).config._out

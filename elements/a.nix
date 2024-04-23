@@ -11,43 +11,47 @@ let
   cfg = config;
 
   htmlLib = import (paths.lib + "/html.nix") { inherit lib; };
+  modulesLib = import (paths.lib + "/modules.nix") { inherit lib; };
 in
 {
   options = {
-    a = mkOption {
-      description = "The <a> tag defines a hyperlink, which is used to link from one page to another.";
-      default = null;
-      type = types.nullOr (
-        types.submodule {
-          options = {
-            attributes = mkOption {
-              description = "Attributes";
-              type = types.submodule {
-                imports = builtins.map (file: paths.attributes + file) [
-                  "/download.nix"
-                  "/href.nix"
-                ];
-              };
-            };
-            children = mkOption {
-              description = "Children";
-              type = types.listOf types.raw;
-            };
-            _out = mkOption {
-              description = "This tags output.";
-              type = types.str;
-            };
+    type = mkOption {
+      type = types.str;
+      default = "a";
+    };
+    attributes = mkOption {
+      description = "Attributes";
+      type = types.submodule {
+        imports = builtins.map (file: paths.attributes + file) [
+          "/download.nix"
+          "/href.nix"
+        ];
+      };
+    };
+    children = mkOption {
+      description = "Children";
+      type = types.listOf (
+        modulesLib.taggedSubmodules {
+          types = {
+            a = lib.types.submodule ./a.nix;
+          };
+          specialArgs = {
+            inherit paths;
           };
         }
       );
     };
+    _out = mkOption {
+      description = "This tags output.";
+      type = types.str;
+    };
   };
 
   config = {
-    a._out =
+    _out =
       let
-        children = "";
-        attributes = htmlLib.resolveHtmlAttributes cfg.a;
+        children = lib.concatStringsSep "\n" (builtins.map (elem: elem._out) cfg.children);
+        attributes = htmlLib.resolveHtmlAttributes cfg;
       in
       lib.concatStringsSep "\n" [
         "<a${attributes}>"
