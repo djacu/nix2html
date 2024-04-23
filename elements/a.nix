@@ -11,14 +11,9 @@ let
   cfg = config;
 
   htmlLib = import (paths.lib + "/html.nix") { inherit lib; };
-  modulesLib = import (paths.lib + "/modules.nix") { inherit lib; };
 in
 {
   options = {
-    type = mkOption {
-      type = types.str;
-      default = "a";
-    };
     attributes = mkOption {
       description = "Attributes";
       type = types.submodule {
@@ -31,12 +26,15 @@ in
     children = mkOption {
       description = "Children";
       type = types.listOf (
-        modulesLib.taggedSubmodules {
-          types = {
-            a = lib.types.submodule ./a.nix;
-          };
-          specialArgs = {
-            inherit paths;
+        types.attrTag {
+          a = mkOption {
+            description = "<a> tag";
+            type = lib.types.submoduleWith {
+              modules = [ ./a.nix ];
+              specialArgs = {
+                inherit paths;
+              };
+            };
           };
         }
       );
@@ -50,8 +48,10 @@ in
   config = {
     _out =
       let
-        children = builtins.map (elem: "  " + elem) (
-          lib.flatten (builtins.map (elem: elem._out) cfg.children)
+        children = (
+          builtins.map (elem: "  " + elem) (
+            lib.flatten (builtins.map (elem: (builtins.head (builtins.attrValues elem))._out) cfg.children)
+          )
         );
         attributes = htmlLib.resolveHtmlAttributes cfg;
       in

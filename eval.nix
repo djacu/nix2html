@@ -18,6 +18,7 @@ let
           }
         )
       ];
-    }).config._out;
+    }).config;
 in
-pkgs.lib.concatStringsSep "\n" conf
+#conf
+pkgs.lib.concatStringsSep "\n" conf._out

@@ -3,25 +3,27 @@
 
     children = [
       {
-        type = "a";
-        children = [ ];
-        attributes = {
-          download.enable = true;
-          download.filename = "some-filename";
+        a = {
+          attributes = {
+            download.enable = true;
+            download.filename = "some-filename";
 
-          href.enable = true;
-          href.url = "#middle";
+            href.enable = true;
+            href.url = "#middle";
+          };
+          children = [ ];
         };
       }
       {
-        type = "a";
-        children = [ ];
-        attributes = {
-          download.enable = true;
-          download.filename = "old-filename";
+        a = {
+          attributes = {
+            download.enable = true;
+            download.filename = "old-filename";
 
-          href.enable = true;
-          href.url = "#bottom";
+            href.enable = true;
+            href.url = "#bottom";
+          };
+          children = [ ];
         };
       }
     ];
