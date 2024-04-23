@@ -1,5 +1,12 @@
 {
   config = {
+    attributes = {
+      download.enable = true;
+      download.filename = "new-filename";
+
+      href.enable = true;
+      href.url = "#top";
+    };
 
     children = [
       {
@@ -15,25 +22,14 @@
         };
       }
       {
-        a = {
+        div = {
           attributes = {
-            download.enable = true;
-            download.filename = "old-filename";
-
-            href.enable = true;
-            href.url = "#bottom";
+            style.enable = true;
+            style.definitions = "color:blue;text-align:center";
           };
           children = [ ];
         };
       }
     ];
-
-    attributes = {
-      download.enable = true;
-      download.filename = "new-filename";
-
-      href.enable = true;
-      href.url = "#top";
-    };
   };
 }
